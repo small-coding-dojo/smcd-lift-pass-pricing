@@ -31,14 +31,26 @@ There are a few steps, you could do any of them.
 Set up a MySQL database on localhost 3306 with user `root` and password `mysql`.
 If you have Docker installed the easiest thing is to use this script, that will initialize a [MariaDB](https://mariadb.org/).
 
-    ./runLocalDatabase.sh
+```shell
+./runLocalDatabase.sh
+```
 
-Inject the data with
+If the sccript above does not initialize your database (e.g. if your're running it via Windows git bash), consider the following alternative:
 
-    mysql -u root -p mysql < ./database/initDatabase.sql
+```shell
+# start the maria db container
+docker run -p 3306:3306 --name mariadb -e MYSQL_ROOT_PASSWORD=mysql -d  mariadb:10.4
+
+# wait until the mariadb inside the container is ready
+sleep 10
+
+# execute database initialization
+docker exec -i mariadb mysql -u root -pmysql < ./database/initDatabase.sql
+```
 
 Then head on to the language of your choice and follow the Readme in there.
 Some of the languages have a failing test that you could finish writing.
+
 
 ## Tips
 
