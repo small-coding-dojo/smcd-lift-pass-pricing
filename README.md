@@ -35,7 +35,7 @@ If you have Docker installed the easiest thing is to use this script, that will 
 ./runLocalDatabase.sh
 ```
 
-If the sccript above does not initialize your database (e.g. if your're running it via Windows git bash), consider the following alternative:
+If the script above does not initialize your database (e.g. if you're running it via Windows WSL), consider the following alternative:
 
 ```shell
 # start the maria db container
