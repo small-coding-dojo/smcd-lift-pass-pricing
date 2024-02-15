@@ -20,6 +20,10 @@ To run the tests:
 
     npm test
 
+To run the tests with coverage:
+
+    npm run test:coverage
+
 To start the application:
 
     npm start
