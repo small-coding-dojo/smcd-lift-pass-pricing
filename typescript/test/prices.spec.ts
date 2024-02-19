@@ -23,4 +23,15 @@ describe('prices', () => {
         expect(response.body).deep.equal(expectedResult)
     });
 
+    [{age: 5, expected: 0}].forEach((testCase) => {
+        it(`Some kids are free`, async () => {
+
+            const response = await request(app)
+                .get(`/prices?age=${testCase.age}`)
+
+            var expectedResult = {cost: testCase.expected}
+            expect(response.body).deep.equal(expectedResult)
+        });
+    });
+
 });
