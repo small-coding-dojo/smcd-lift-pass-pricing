@@ -35,6 +35,19 @@ describe('prices', () => {
     });
 
     [
+        {age: 4, date: "2024-02-26", type: "night", expected: 0}
+    ].forEach((testCase) => {
+        it(`unable to cover 79, night rate for kids`, async () => {
+
+            const response = await request(app)
+                .get(`/prices?age=${testCase.age}&date=${testCase.date}&type=${testCase.type}`)
+
+            var expectedResult = {cost: testCase.expected}
+            expect(response.body).deep.equal(expectedResult)
+        });
+    });
+
+    [
         {age: 21, date: "2019-02-18", type: "1jour", expected: 35}
     ].forEach((testCase) => {
         it(`cover 39-44`, async () => {
