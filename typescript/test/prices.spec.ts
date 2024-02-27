@@ -100,5 +100,18 @@ describe('prices', () => {
         });
     });
 
+    [
+        {age: 63, date: "2024-02-26", type: "night", expected: 19}
+    ].forEach((testCase) => {
+        it(`cover 76, night rate`, async () => {
+
+            const response = await request(app)
+                .get(`/prices?age=${testCase.age}&date=${testCase.date}&type=${testCase.type}`)
+
+            var expectedResult = {cost: testCase.expected}
+            expect(response.body).deep.equal(expectedResult)
+        });
+    });
+
 
 });
