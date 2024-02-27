@@ -34,4 +34,31 @@ describe('prices', () => {
         });
     });
 
+    [
+        {age: 21, date: "2019-02-18", type: "1jour", expected: 35}
+    ].forEach((testCase) => {
+        it(`cover 39-44`, async () => {
+
+            const response = await request(app)
+                .get(`/prices?age=${testCase.age}&date=${testCase.date}&type=${testCase.type}`)
+
+            var expectedResult = {cost: testCase.expected}
+            expect(response.body).deep.equal(expectedResult)
+        });
+    });
+
+    [
+        {age: 21, date: "2024-02-26", type: "1jour", expected: 23}
+    ].forEach((testCase) => {
+        it(`cover 51, Mondays seem to be reduced by 35%`, async () => {
+
+            const response = await request(app)
+                .get(`/prices?age=${testCase.age}&date=${testCase.date}&type=${testCase.type}`)
+
+            var expectedResult = {cost: testCase.expected}
+            expect(response.body).deep.equal(expectedResult)
+        });
+    });
+
+
 });
