@@ -87,5 +87,18 @@ describe('prices', () => {
         });
     });
 
+    [
+        {age: 65, date: "2024-02-26", type: "night", expected: 8}
+    ].forEach((testCase) => {
+        it(`cover 72-74, seniors seem to pay 40% at night`, async () => {
+
+            const response = await request(app)
+                .get(`/prices?age=${testCase.age}&date=${testCase.date}&type=${testCase.type}`)
+
+            var expectedResult = {cost: testCase.expected}
+            expect(response.body).deep.equal(expectedResult)
+        });
+    });
+
 
 });
