@@ -73,4 +73,19 @@ describe('prices', () => {
         });
     });
 
+
+    [
+        {age: 65, date: "2024-02-26", type: "1jour", expected: 18}
+    ].forEach((testCase) => {
+        it(`cover 63-64, seniors pay less`, async () => {
+
+            const response = await request(app)
+                .get(`/prices?age=${testCase.age}&date=${testCase.date}&type=${testCase.type}`)
+
+            var expectedResult = {cost: testCase.expected}
+            expect(response.body).deep.equal(expectedResult)
+        });
+    });
+
+
 });
