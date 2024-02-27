@@ -60,5 +60,17 @@ describe('prices', () => {
         });
     });
 
+    [
+        {age: 14, date: "2024-02-26", type: "1jour", expected: 25}
+    ].forEach((testCase) => {
+        it(`cover 56, some kids do have to pay`, async () => {
+
+            const response = await request(app)
+                .get(`/prices?age=${testCase.age}&date=${testCase.date}&type=${testCase.type}`)
+
+            var expectedResult = {cost: testCase.expected}
+            expect(response.body).deep.equal(expectedResult)
+        });
+    });
 
 });
