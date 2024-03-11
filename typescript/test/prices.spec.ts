@@ -120,5 +120,12 @@ describe("prices", () => {
         });
       }
     );
+
+    it("does crash something", async () => {
+      const response = await request(app).get("/prices?type=irgendeinquatsch");
+
+      expect(response.statusCode).deep.equal(500);
+    });
+
   });
 });
