@@ -128,4 +128,21 @@ describe("prices", () => {
     });
 
   });
+
+  describe("put", () => {
+    it("does something", async () => {
+      await request(app).put("/prices?cost=1111&type=puttest");
+      const assertResponse = await request(app).get("/prices?type=puttest");
+      expect(assertResponse.statusCode).equal(200);
+      expect(assertResponse.body).deep.equal({cost: 1111});
+
+      const putResponse = await request(app).put("/prices?cost=10&type=puttest");
+
+      const testResponse = await request(app).get("/prices?type=puttest");
+
+      expect(testResponse.statusCode).equal(200);
+      expect(testResponse.body).deep.equal({cost: 10});
+
+    });
+  });
 });
