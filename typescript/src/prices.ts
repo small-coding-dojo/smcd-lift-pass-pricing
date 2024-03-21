@@ -70,14 +70,10 @@ async function createApp() {
                         }
                     }
                 } else {
-                    if (req.query.age as any >= 6) {
-                        if (req.query.age as any > 64) {
-                            res.json({cost: Math.ceil(result.cost * .4)})
-                        } else {
-                            res.json(result)
-                        }
+                    if (req.query.age as any > 64) {
+                        res.json({cost: Math.ceil(result.cost * .4)})
                     } else {
-                        res.json({cost: 0})
+                        res.json(result)
                     }
                 }
             }
