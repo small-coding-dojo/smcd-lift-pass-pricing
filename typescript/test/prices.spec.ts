@@ -145,4 +145,13 @@ describe("prices", () => {
 
     });
   });
+
+
+  describe("new feature", () => {
+    it("irgendwas", async () => {
+      var actualResult = await request(app).get("/prices?count=10&type=1jour");
+      const expectedResult = {cost:350};
+      expect(actualResult.body).deep.equal(expectedResult);
+    });
+  });
 });

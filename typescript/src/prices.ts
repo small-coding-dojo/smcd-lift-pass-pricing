@@ -7,6 +7,7 @@ async function createApp() {
     let connectionOptions = {host: 'localhost', user: 'root', database: 'lift_pass', password: 'mysql'}
     const connection = await mysql.createConnection(connectionOptions)
 
+
     app.put('/prices', async (req, res) => {
         const liftPassCost = req.query.cost
         const liftPassType = req.query.type
@@ -18,6 +19,7 @@ async function createApp() {
         res.json()
     })
     app.get('/prices', async (req, res, next) => {
+        let response: Object | undefined
         try {
             const result = (await connection.query(
                 'SELECT cost FROM `base_price` ' +
@@ -25,7 +27,7 @@ async function createApp() {
                 [req.query.type]))[0][0]
 
             if (req.query.age as any < 6) {
-                res.json({cost: 0})
+                response = {cost: 0}
             } else {
                 if (req.query.type !== 'night') {
                     const holidays = (await connection.query(
@@ -54,28 +56,36 @@ async function createApp() {
 
                     // TODO apply reduction for others
                     if (req.query.age as any < 15) {
-                        res.json({cost: Math.ceil(result.cost * .7)})
+                        response = {cost: Math.ceil(result.cost * .7)}
                     } else {
                         if (req.query.age === undefined) {
                             let cost = result.cost * (1 - reduction / 100)
-                            res.json({cost: Math.ceil(cost)})
+                            response ={cost: Math.ceil(cost)}
                         } else {
                             if (req.query.age as any > 64) {
                                 let cost = result.cost * .75 * (1 - reduction / 100)
-                                res.json({cost: Math.ceil(cost)})
+                                response ={cost: Math.ceil(cost)}
                             } else {
                                 let cost = result.cost * (1 - reduction / 100)
-                                res.json({cost: Math.ceil(cost)})
+                                response = {cost: Math.ceil(cost)}
                             }
                         }
                     }
                 } else {
                     if (req.query.age as any > 64) {
-                        res.json({cost: Math.ceil(result.cost * .4)})
+                        response = {cost: Math.ceil(result.cost * .4)}
                     } else {
-                        res.json(result)
+                        response = result
                     }
                 }
+            }
+            if( response != undefined ){
+                let count = req.query.count;
+                if( count !== undefined){
+                    let countAsNumber = Number(count);
+                    response = {cost: response['cost'] * countAsNumber}
+                }
+                res.json(response)
             }
         } catch ( error ) {
             next(error);
