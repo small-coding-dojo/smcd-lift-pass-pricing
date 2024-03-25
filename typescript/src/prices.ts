@@ -21,7 +21,7 @@ async function createApp() {
     app.get('/prices', async (req, res, next) => {
         let response: Object | undefined
         try {
-            const result = (await connection.query(
+            const databaseRate = (await connection.query(
                 'SELECT cost FROM `base_price` ' +
                 'WHERE `type` = ? ',
                 [req.query.type]))[0][0]
@@ -56,26 +56,28 @@ async function createApp() {
 
                     // TODO apply reduction for others
                     if (req.query.age as any < 15) {
-                        response = {cost: Math.ceil(result.cost * .7)}
+                        response = {cost: Math.ceil(databaseRate.cost * .7)}
                     } else {
                         if (req.query.age === undefined) {
-                            let cost = result.cost * (1 - reduction / 100)
-                            response ={cost: Math.ceil(cost)}
+                            if (databaseRate?.cost != undefined) {
+                                let cost = databaseRate.cost * (1 - reduction / 100)
+                                response ={cost: Math.ceil(cost)}
+                            }
                         } else {
                             if (req.query.age as any > 64) {
-                                let cost = result.cost * .75 * (1 - reduction / 100)
+                                let cost = databaseRate.cost * .75 * (1 - reduction / 100)
                                 response ={cost: Math.ceil(cost)}
                             } else {
-                                let cost = result.cost * (1 - reduction / 100)
+                                let cost = databaseRate.cost * (1 - reduction / 100)
                                 response = {cost: Math.ceil(cost)}
                             }
                         }
                     }
                 } else {
                     if (req.query.age as any > 64) {
-                        response = {cost: Math.ceil(result.cost * .4)}
+                        response = {cost: Math.ceil(databaseRate.cost * .4)}
                     } else {
-                        response = result
+                        response = databaseRate
                     }
                 }
             }
@@ -86,6 +88,8 @@ async function createApp() {
                     response = {cost: response['cost'] * countAsNumber}
                 }
                 res.json(response)
+            } else {
+                res.sendStatus(404)
             }
         } catch ( error ) {
             next(error);
